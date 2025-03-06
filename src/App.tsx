@@ -1,9 +1,10 @@
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
-import { CssBaseline ,ThemeProvider} from "@mui/material";
+import { Box,CssBaseline ,ThemeProvider} from "@mui/material";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { themeSettings } from "./theme";
 import Navbar from "@/scenes/navbar";
+import Dashboard from "@/scenes/dashboard";
 function App() {
   const theme = useMemo(() => createTheme(themeSettings), []);
   return (
@@ -11,12 +12,13 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <div style={{ padding: "1rem 2rem 4rem 2rem" }}>
+          <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
+            <Navbar/>
             <Routes>
-              <Route path="/" element={<h1>Dashboard Page</h1>} />
-              <Route path="/predictions" element={<h1>Prediction Page</h1>} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/predictions" element={<div>Prediction Page</div>} />
             </Routes>
-          </div>
+            </Box>
         </ThemeProvider>
       </BrowserRouter>
     </div>
