@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import DashboardBox from '@/components/DashboardBox';
 import { useGetKpisQuery } from "@/state/api";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTheme } from "@mui/material";
 import Header from "@/components/Header";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 type Props = {};
 
@@ -24,6 +24,19 @@ const Row1 = (props: Props) => {
     );
   }
     , [data]);
+    const revenueProfit = useMemo(() => {
+      return (
+        data &&
+        data[0].monthlyData.map(({ month, revenue, expenses }) => {
+          return {
+            name: month.substring(0, 3),
+            revenue: revenue,
+            profit: (revenue-expenses).toFixed(2)
+          }
+        })
+      );
+    }
+      , [data]);
   return (
     <>
       <DashboardBox gridArea="a">
@@ -66,8 +79,12 @@ const Row1 = (props: Props) => {
                  stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <XAxis dataKey="name" tickLine={false} 
-            syle={{fontSize:"10px"}}/>
+            <XAxis 
+            dataKey="name" 
+            tickLine={false} 
+            syle= {{ fontSize:"10px"}}
+            />
+
             <YAxis tickLine={false} 
             syle={{fontSize:"10px"}} 
             axisLine={{strokeWidth:"0"}}
@@ -89,8 +106,89 @@ const Row1 = (props: Props) => {
           </AreaChart>
         </ResponsiveContainer>
       </DashboardBox>
-      <DashboardBox gridArea="b"></DashboardBox>
-      <DashboardBox gridArea="c"></DashboardBox>
+
+      <DashboardBox gridArea="b">
+        <Header
+        title="Profit and Revenue"
+        subtitle="top line represent profit, bottom line represent revenue"
+        sideText="+4%"
+        />
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={revenueProfit}
+            margin={{
+              top: 20,
+              right: 0,
+              left:5 ,
+              bottom: 55,
+            }}
+          >
+            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
+
+            <XAxis dataKey= "name" tickLine={false} 
+            syle={{fontSize:"10px"}}/>
+
+            <YAxis yAxisId="left" orientation="left"
+            tickLine={false} 
+            syle={{fontSize:"10px"}} 
+            axisLine={false}
+            />
+
+            <YAxis yAxisId="right" orientation="right"
+            tickLine={false} 
+            syle={{fontSize:"10px"}} 
+            axisLine={false}
+            />
+            <Tooltip />
+            <Legend height={20} wrapperStyle={{
+              margin: "0px 0px 10px 0px",
+            }}/>
+            <Line yAxisId="left"
+            type="monotone"
+             dataKey="profit" 
+            fillOpacity={1}
+             dot = {true}
+            stroke={palette.tertiary[500]} 
+            fill="url(#colorProfit)"/>
+
+          <Line yAxisId="right"
+          type="monotone"
+             dataKey="revenue" 
+             dot = {true}
+             fillOpacity={1}
+            stroke={palette.primary.main} 
+            fill="url(#colorRevenue)"/>
+          </LineChart>
+        </ResponsiveContainer>
+      </DashboardBox>
+      <DashboardBox gridArea="c">
+      <ResponsiveContainer width="100%" height="100%">
+      <Header
+        title="Revenue Month by Month"
+        subtitle="bar chart represent revenue month by month"
+        sideText="+4%"
+        />
+        <BarChart
+          width={500}
+          height={300}
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="month" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
+          <Bar dataKey="uv" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
+        </BarChart>
+      </ResponsiveContainer>
+      </DashboardBox>
     </>
   )
 };
