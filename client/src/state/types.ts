@@ -35,7 +35,6 @@ export interface GetKpisResponse{
     updatedAt:string;
 }
 export interface GetProductsResponse{
-    monthlyData: any;
     id: string;
     _id: string;
     __v: number;
@@ -45,4 +44,15 @@ export interface GetProductsResponse{
     createdAt:string;
     updatedAt:string;
     
+}
+export interface GetTransactionsResponse{
+    id: string;
+    _id: string;
+    __v: number;
+    amount:number;
+    buyer:string;
+    productIds:Array<string>;
+    createdAt:string;
+    updatedAt:string;
+
 }
