@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
 app.use(cors());
 // console.log("hello");
-console.log("Mongo URI:", process.env.MONGO_URI);
+//console.log("Mongo URI:", process.env.MONGO_URI);
 
 //Routes
 app.use("/kpi", kpiRoutes); 
